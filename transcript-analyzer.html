@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transcript Analyzer</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+            font-size: 14px;
+        }
+
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .card-content {
+            padding: 24px;
+        }
+
+        .space-y-6 > * + * {
+            margin-top: 24px;
+        }
+
+        .space-y-4 > * + * {
+            margin-top: 12px;
+        }
+
+        .card-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin: 0 0 16px 0;
+        }
+
+        .flex {
+            display: flex;
+        }
+
+        .items-center {
+            align-items: center;
+        }
+
+        .space-x-2 > * + * {
+            margin-left: 8px;
+        }
+
+        .language-select, .button-record {
+            height: 38px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 4px;
+            border: 1px solid #d1d5db;
+        }
+
+        .language-select {
+            width: 60px;
+            background-color: #f3f4f6;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .button-record {
+            width: calc(100% - 68px);
+            background-color: black;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .button-record svg {
+            margin-right: 8px;
+        }
+
+        select {
+            width: 100%;
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #d1d5db;
+            font-size: 14px;
+        }
+
+        .test-link {
+            color: #3b82f6;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 40px;
+            height: 20px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 2px;
+            bottom: 2px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #3b82f6;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(20px);
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #d1d5db;
+            resize: vertical;
+            font-size: 14px;
+        }
+
+        .button-secondary {
+            background-color: #e5e7eb;
+            color: #111827;
+            width: auto;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+            border: none;
+        }
+
+        .semi-bold {
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="card-content space-y-6">
+            <div class="space-y-6">
+                <h2 class="card-title">Transcript</h2>
+                
+                <div class="flex items-center space-x-2">
+                    <div class="language-select">
+                        <select id="languageSelect" style="width: 100%; height: 100%; opacity: 0; position: absolute; top: 0; left: 0;">
+                            <option value="en-GB">🇬🇧</option>
+                            <option value="en-US">🇺🇸</option>
+                            <option value="fr-FR">🇫🇷</option>
+                            <option value="de-DE">🇩🇪</option>
+                            <option value="es-ES">🇪🇸</option>
+                        </select>
+                        <span id="selectedFlag">🇬🇧</span>
+                    </div>
+                    <button class="button-record">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
+                        Start recording
+                    </button>
+                </div>
+
+                <div class="flex items-center space-x-2">
+                    <select>
+                        <option value="standard">Standard - MacBook Air microphone</option>
+                        <option value="external">External Microphone</option>
+                    </select>
+                    <span class="test-link">Test</span>
+                </div>
+
+                <div class="flex items-center space-x-2">
+                    <label class="switch">
+                        <input type="checkbox">
+                        <span class="slider"></span>
+                    </label>
+                    <span class="semi-bold">Stream to document</span>
+                </div>
+
+                <textarea placeholder="The transcript will be shown here" readonly></textarea>
+            </div>
+
+            <div class="space-y-4">
+                <h2 class="card-title">Analysis</h2>
+                
+                <select>
+                    <option value="" disabled selected>Select template...</option>
+                    <option value="template1">Template 1</option>
+                    <option value="template2">Template 2</option>
+                    <option value="template3">Template 3</option>
+                </select>
+
+                <button class="button-secondary">Generate</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.getElementById('languageSelect').addEventListener('change', function() {
+            document.getElementById('selectedFlag').textContent = this.options[this.selectedIndex].text;
+        });
+    </script>
+</body>
+</html>
+
